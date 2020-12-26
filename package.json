@@ -42,7 +42,9 @@
 		"typescript": "^4.1.2",
 		"vscode-test": "^1.4.1"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"typescript": "^4.1.2"
+	},
 	"publisher": "umaumax",
 	"repository": {
 		"type": "git",
