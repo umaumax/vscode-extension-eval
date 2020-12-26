@@ -43,5 +43,9 @@
 		"vscode-test": "^1.4.1"
 	},
 	"dependencies": {},
-	"publisher" : "umaumax"
+	"publisher": "umaumax",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/umaumax/vscode-extension-eval.git"
+	}
 }
