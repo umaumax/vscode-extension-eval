@@ -1,27 +1,50 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as ts from "typescript";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	console.log('Congratulations, your extension "vscode-extension-eval" is now active!');
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vscode-extension-wrapper" is now active!');
+	context.subscriptions.push(
+		vscode.commands.registerCommand('vscode-extension-eval.action', (arg?: any) => {
+			if (arg === undefined) {
+				vscode.window.showInformationMessage('vscode-extension-eval.action: set "args"');
+				return;
+			}
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vscode-extension-wrapper.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from vscode-extension-wrapper!');
-	});
-
-	context.subscriptions.push(disposable);
+			let command = "";
+			let lang = "ts";
+			if (typeof arg.lang === "string") {
+				lang = arg.lang;
+				const langs = ["ts", "typescript", "js", "javascript"];
+				if (!langs.includes(lang)) {
+					vscode.window.showInformationMessage('vscode-extension-eval.action: unknown "args.lang"', lang);
+					return;
+				}
+			}
+			if (typeof arg.command === "object") {
+				command = arg.command.join("\n");
+			} else if (typeof arg.command === "string") {
+				command = arg.command;
+			}
+			if (command === "") {
+				vscode.window.showInformationMessage('vscode-extension-eval.action: set "args.command"');
+				return;
+			}
+			console.log('vscode-extension-eval.action: eval:', command);
+			let eval_command = command;
+			if (["ts", "typescript"].includes(lang)) {
+				eval_command = ts.transpile(command);
+			}
+			try {
+				// don't use Function(). Because Function() use exports inside
+				eval(eval_command);
+			} catch (error) {
+				let result = error.toString();
+				console.log('vscode-extension-eval.action: eval result:', result);
+				vscode.window.showInformationMessage('vscode-extension-eval.action: error:', result);
+			}
+		})
+	);
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
