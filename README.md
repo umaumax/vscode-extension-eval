@@ -1,8 +1,8 @@
 # vscode-extension-eval
 
 ## Features
-* `keybinding.json`からtypescriptのコードを`eval`して呼び出す
-  * 他の拡張機能の提供するAPIを簡単にwrapして呼び出す事が可能となる
+* You can typescript/javascript code from `keybinding.json`.
+  * You can easily wrap other extension commands.
 
 ## Requirements
 nothing
@@ -59,8 +59,8 @@ echo ']'
     "command": "vscode-extension-eval.action",
     "when": "editorFocus",
     "args": {
-      "lang": "ts",
-      "command": [
+      "lang": "ts", // typescript, js, javascript
+      "command": [ // array of string or simply one line string is ok: "vscode.commands.executeCommand('vim-search-and-replace.start', 'hogehgoe');"
         "import { TextEditor, Selection } from 'vscode';",
         "function selectWordAtCursorPosition(editor: TextEditor): boolean {",
         "    if (!editor.selection.isEmpty) {",
