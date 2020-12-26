@@ -1,70 +1,95 @@
-
-## how to start
-[Your First Extension \| Visual Studio Code Extension API]( https://code.visualstudio.com/api/get-started/your-first-extension )
-
-----
-
-This is the README for your extension "vscode-extension-wrapper". After writing up a brief description, we recommend including the following sections.
 # vscode-extension-eval
 
 ## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+* `keybinding.json`からtypescriptのコードを`eval`して呼び出す
+  * 他の拡張機能の提供するAPIを簡単にwrapして呼び出す事が可能となる
 
 ## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+nothing
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+e.g. wrap `vim-search-and-replace.start` command
 
-For example:
+see [Vim Search and Replace \- Visual Studio Marketplace]( https://marketplace.visualstudio.com/items?itemName=nlehmann.vscode-vim-search-and-replace )
 
-This extension contributes the following settings:
+src file
+``` ts
+import { TextEditor, Selection } from 'vscode';
+function selectWordAtCursorPosition(editor: TextEditor): boolean {
+	if (!editor.selection.isEmpty) {
+		return true;
+	}
+	const cursorWordRange = editor.document.getWordRangeAtPosition(editor.selection.active);
+	if (!cursorWordRange) {
+		return false;
+	}
+	const newSe = new Selection(cursorWordRange.start.line, cursorWordRange.start.character, cursorWordRange.end.line, cursorWordRange.end.character);
+	editor.selection = newSe;
+	return true;
+}
+(() => {
+	const editor = vscode.window.activeTextEditor!;
+	if (!editor) { return; }
+	let word = '';
+	if (editor.selection.isEmpty) {
+		if (!selectWordAtCursorPosition(editor)) {
+			vscode.window.showInformationMessage('vscode-extension-eval: Can not get word at cursor!');
+			return;
+		}
+	}
+	word = editor.document.getText(editor.selection);
+	console.log('vscode-extension-eval: word is', word);
+	vscode.commands.executeCommand('vim-search-and-replace.start', word);
+	vscode.window.showInformationMessage('vscode-extension-eval: use ctrl+j or ctrl+k');
+})();
+```
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+convert command
+``` bash
+echo '['
+sed 's/'$'\t''/    /g' | sed 's/"/\\"/g' | sed -e 's/^/"/' -e 's/$/",/'
+echo ']'
+```
 
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+`keybindings.json`
+``` json
+  {
+    "key": "ctrl+s",
+    "command": "vscode-extension-eval.action",
+    "when": "editorFocus",
+    "args": {
+      "lang": "ts",
+      "command": [
+        "import { TextEditor, Selection } from 'vscode';",
+        "function selectWordAtCursorPosition(editor: TextEditor): boolean {",
+        "    if (!editor.selection.isEmpty) {",
+        "        return true;",
+        "    }",
+        "    const cursorWordRange = editor.document.getWordRangeAtPosition(editor.selection.active);",
+        "    if (!cursorWordRange) {",
+        "        return false;",
+        "    }",
+        "    const newSe = new Selection(cursorWordRange.start.line, cursorWordRange.start.character, cursorWordRange.end.line, cursorWordRange.end.character);",
+        "    editor.selection = newSe;",
+        "    return true;",
+        "}",
+        "(() => {",
+        "    const editor = vscode.window.activeTextEditor!;",
+        "    if (!editor) { return; }",
+        "    let word = '';",
+        "    if (editor.selection.isEmpty) {",
+        "        if (!selectWordAtCursorPosition(editor)) {",
+        "            vscode.window.showInformationMessage('vscode-extension-eval: Can not get word at cursor!');",
+        "            return;",
+        "        }",
+        "    }",
+        "    word = editor.document.getText(editor.selection);",
+        "    console.log('word is', word);",
+        "    vscode.commands.executeCommand('vim-search-and-replace.start', word);",
+        "    vscode.window.showInformationMessage('vscode-extension-eval: use ctrl+j or ctrl+k');",
+        "})();",
+        ]
+    },
+  }
+```
