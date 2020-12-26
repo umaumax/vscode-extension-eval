@@ -1,7 +1,7 @@
 # vscode-extension-eval
 
 ## Features
-* You can typescript/javascript code from `keybinding.json`.
+* You can typescript/javascript code from `keybindings.json`.
   * You can easily wrap other extension commands.
 
 ## Requirements
