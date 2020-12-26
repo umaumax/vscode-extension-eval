@@ -1,6 +1,6 @@
 {
-	"name": "vscode-extension-wrapper",
-	"displayName": "vscode-extension-wrapper",
+	"name": "vscode-extension-eval",
+	"displayName": "vscode-extension-eval",
 	"description": "run wapper command of other extensions",
 	"version": "0.0.1",
 	"engines": {
@@ -10,14 +10,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:vscode-extension-wrapper.helloWorld"
+		"onCommand:vscode-extension-eval.action"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "vscode-extension-wrapper.helloWorld",
-				"title": "Hello World"
+				"command": "vscode-extension-eval.action",
+				"title": "Eval Code from arg (call from keybindings.json)"
 			}
 		]
 	},
