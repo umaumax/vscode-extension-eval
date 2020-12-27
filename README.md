@@ -99,3 +99,30 @@ function vscode-extension-eval-decoder() {
     },
   }
 ```
+
+e.g. reverse `expandLineSelection` (`cmd+l`)
+``` json
+{
+  "key": "cmd+shift+l",
+  "command": "vscode-extension-eval.action",
+  "when": "editorHasSelection",
+  "args": {
+    "lang": "ts",
+    "command": [
+    "function clamp(value: number, min: number, max: number): number {",
+    "  return Math.min(Math.max(value, min), max);",
+    "}",
+    "const editor = vscode.window.activeTextEditor!;",
+    "const document = editor.document;",
+    "const selection = editor.selection;",
+    "const startLine = document.lineAt(",
+    "  clamp(selection.start.line - 1, 0, document.lineCount - 1)",
+    ");",
+    "editor.selection = new vscode.Selection(",
+    "  startLine.range.start,",
+    "  selection.end",
+    ");",
+    ]
+  },
+},
+```
