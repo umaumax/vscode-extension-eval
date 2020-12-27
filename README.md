@@ -45,11 +45,17 @@ function selectWordAtCursorPosition(editor: TextEditor): boolean {
 })();
 ```
 
-convert command
+convert command (sed is gnu sed)
 ``` bash
-echo '['
-sed 's/'$'\t''/    /g' | sed 's/"/\\"/g' | sed -e 's/^/"/' -e 's/$/",/'
-echo ']'
+function vscode-extension-eval-encoder() {
+  echo '['
+  sed 's/'$'\t''/    /g' | sed 's/"/\\"/g' | sed -e 's/^/"/' -e 's/$/",/'
+  echo ']'
+}
+
+function vscode-extension-eval-decoder() {
+  sed -E 's/^ *([\["]|\])|",$//g' | sed '1{/^$/d}; ${/^$/d}'
+}
 ```
 
 `keybindings.json`
