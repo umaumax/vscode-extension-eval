@@ -2,7 +2,7 @@
   "name": "vscode-extension-eval",
   "displayName": "vscode-extension-eval",
   "description": "run wapper command of other extensions",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.52.0"
   },
