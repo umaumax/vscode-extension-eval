@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as ts from "typescript";
 
-function eval_code(lang: string, code: string) {
+function eval_code(context: vscode.ExtensionContext, lang: string, code: string) {
 	let eval_command = code;
 	if (["ts", "typescript"].includes(lang)) {
 		eval_command = ts.transpile(code);
@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 			console.log('vscode-extension-eval.action: eval:', command);
-			eval_code(lang, command);
+			eval_code(context, lang, command);
 		})
 	);
 }
