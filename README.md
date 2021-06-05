@@ -12,11 +12,27 @@ nothing
 
 Paste below code to editor and run `EVAL ACTION: Eval Code selection or entire document` from command pallet.
 
+hello world
 ``` typescript
 vscode.window.showInformationMessage('hello1!');
 vscode.window.showInformationMessage('hello2!');
 vscode.window.showInformationMessage('hello3!');
 vscode.window.showInformationMessage('hello4!');
+```
+
+dump context.environmentVariableCollection
+``` typescript
+context.environmentVariableCollection.replace('XXX', '123');
+context.environmentVariableCollection.forEach((variable: string, mutator: vscode.EnvironmentVariableMutator, collection: vscode.EnvironmentVariableCollection) => {
+    vscode.window.showInformationMessage(variable + ':' + mutator.value);
+});
+```
+
+debug with console output
+``` typescript
+let output_channel = vscode.window.createOutputChannel("Eval Debug Console");
+output_channel.appendLine("Hello Debug Console");
+output_channel.show(); // force to open output console window
 ```
 
 ### Extension Settings for `keybindings.json`
