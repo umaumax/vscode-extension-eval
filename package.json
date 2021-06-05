@@ -6,12 +6,8 @@
   "engines": {
     "vscode": "^1.52.0"
   },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:vscode-extension-eval.action"
-  ],
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:vscode-extension-eval.action"],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
