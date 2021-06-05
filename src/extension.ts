@@ -22,8 +22,17 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('vscode-extension-eval.action', (arg?: any) => {
 			if (arg === undefined) {
-				vscode.window.showInformationMessage('vscode-extension-eval.action: set "args"');
-				return;
+				// set default values
+				arg = { lang: "ts", command: "" };
+				const editor = vscode.window.activeTextEditor;
+				if (editor) {
+					const selection = editor.selection;
+					var text = editor.document.getText(selection);
+					if (selection.isEmpty) {
+						text = editor.document.getText();
+					}
+					arg.command = text;
+				}
 			}
 
 			let command = "";

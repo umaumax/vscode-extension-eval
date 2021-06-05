@@ -13,7 +13,7 @@
     "commands": [
       {
         "command": "vscode-extension-eval.action",
-        "title": "Eval Code from arg (call from keybindings.json)"
+        "title": "EVAL ACTION: Eval Code selection or entire document"
       }
     ]
   },

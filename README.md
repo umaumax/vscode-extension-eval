@@ -1,13 +1,25 @@
 # vscode-extension-eval
 
 ## Features
-* You can typescript/javascript code from `keybindings.json`.
-  * You can easily wrap other extension commands.
+* You can typescript/javascript code from `keybindings.json` or the current editor.
+  * You can easily wrap other extension commands at `keybindings.json`.
+* If you run `EVAL ACTION: Eval Code selection or entire document` from command pallet, target code is current selection or entire editor document.
 
 ## Requirements
 nothing
 
-## Extension Settings
+## how to run
+
+Paste below code to editor and run `EVAL ACTION: Eval Code selection or entire document` from command pallet.
+
+``` typescript
+vscode.window.showInformationMessage('hello1!');
+vscode.window.showInformationMessage('hello2!');
+vscode.window.showInformationMessage('hello3!');
+vscode.window.showInformationMessage('hello4!');
+```
+
+### Extension Settings for `keybindings.json`
 
 e.g. wrap `vim-search-and-replace.start` command
 
