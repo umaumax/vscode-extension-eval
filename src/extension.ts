@@ -1,6 +1,21 @@
 import * as vscode from 'vscode';
 import * as ts from "typescript";
 
+function eval_code(lang: string, code: string) {
+	let eval_command = code;
+	if (["ts", "typescript"].includes(lang)) {
+		eval_command = ts.transpile(code);
+	}
+	try {
+		// don't use Function(). Because Function() use exports inside
+		eval(eval_command);
+	} catch (error) {
+		let result = error.toString();
+		console.log('vscode-extension-eval.action: eval result:', result);
+		vscode.window.showInformationMessage('vscode-extension-eval.action: error:', result);
+	}
+}
+
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "vscode-extension-eval" is now active!');
 
@@ -31,18 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 			console.log('vscode-extension-eval.action: eval:', command);
-			let eval_command = command;
-			if (["ts", "typescript"].includes(lang)) {
-				eval_command = ts.transpile(command);
-			}
-			try {
-				// don't use Function(). Because Function() use exports inside
-				eval(eval_command);
-			} catch (error) {
-				let result = error.toString();
-				console.log('vscode-extension-eval.action: eval result:', result);
-				vscode.window.showInformationMessage('vscode-extension-eval.action: error:', result);
-			}
+			eval_code(lang, command);
 		})
 	);
 }
